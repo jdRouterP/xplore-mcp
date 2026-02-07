@@ -1,0 +1,11 @@
+[
+  { "chainId": "1", "chainNames": ["Ethereum", "Ethereum Mainnet", "ETH"] },
+  { "chainId": "10", "chainNames": ["Optimism", "OP Mainnet", "OP"] },
+  { "chainId": "56", "chainNames": ["BNB Chain", "BNB Smart Chain Mainnet", "BSC", "Binance Smart Chain"] },
+  { "chainId": "137", "chainNames": ["Polygon", "Polygon Mainnet", "Polygon PoS", "MATIC"] },
+  { "chainId": "8453", "chainNames": ["Base", "Base Mainnet"] },
+  { "chainId": "42161", "chainNames": ["Arbitrum", "Arbitrum One", "ARB"] },
+  { "chainId": "43114", "chainNames": ["Avalanche", "Avalanche C-Chain", "AVAX"] },
+  { "chainId": "59144", "chainNames": ["Linea", "Linea Mainnet"] },
+  { "chainId": "7565164", "chainNames": ["Solana", "SOL"] }
+]

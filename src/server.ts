@@ -1,26 +1,38 @@
 import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
+import type { TokenDb } from "./lib/token-db.js";
+import { registerSearchTokens } from "./tools/search-tokens.js";
+import { registerGetSupportedChains } from "./tools/get-supported-chains.js";
 
-export function createServer() {
+export function createServer(tokenDb: TokenDb) {
   const server = new McpServer({
     name: "debridge-mcp",
     version: "0.1.0",
   });
 
-  server.tool("get-instructions", "Returns usage instructions for the deBridge MCP server", () => ({
-    content: [
-      {
-        type: "text",
-        text: [
-          "deBridge MCP Server",
-          "",
-          "This server provides tools for interacting with the deBridge protocol — a cross-chain interoperability layer for DeFi.",
-          "",
-          "Available tools:",
-          "  - get-instructions: Show this help message",
-        ].join("\n"),
-      },
-    ],
-  }));
+  server.registerTool(
+    "get-instructions",
+    { description: "Returns usage instructions for the deBridge MCP server" },
+    () => ({
+      content: [
+        {
+          type: "text",
+          text: [
+            "deBridge MCP Server",
+            "",
+            "This server provides tools for interacting with the deBridge protocol — a cross-chain interoperability layer for DeFi.",
+            "",
+            "Available tools:",
+            "  - get-instructions: Show this help message",
+            "  - search_tokens: Search for tokens by name, symbol, or address",
+            "  - get_supported_chains: List supported blockchain networks",
+          ].join("\n"),
+        },
+      ],
+    }),
+  );
+
+  registerSearchTokens(server, tokenDb);
+  registerGetSupportedChains(server, tokenDb);
 
   return server;
 }
