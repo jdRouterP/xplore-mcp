@@ -10,7 +10,7 @@ export function createServer(tokenDb: TokenDb) {
   });
 
   server.registerTool(
-    "get-instructions",
+    "get_instructions",
     { description: "Returns usage instructions for the deBridge MCP server" },
     () => ({
       content: [
@@ -22,7 +22,7 @@ export function createServer(tokenDb: TokenDb) {
             "This server provides tools for interacting with the deBridge protocol — a cross-chain interoperability layer for DeFi.",
             "",
             "Available tools:",
-            "  - get-instructions: Show this help message",
+            "  - get_instructions: Show this help message",
             "  - search_tokens: Search for tokens by name, symbol, or address",
             "  - get_supported_chains: List supported blockchain networks",
           ].join("\n"),

@@ -48,11 +48,11 @@ describe("debridge-mcp server", () => {
   it("lists tools", async () => {
     const result = await client.listTools();
     const names = result.tools.map((t) => t.name).sort();
-    expect(names).toEqual(["get-instructions", "get_supported_chains", "search_tokens"]);
+    expect(names).toEqual(["get_instructions", "get_supported_chains", "search_tokens"]);
   });
 
-  it("returns instructions from get-instructions tool", async () => {
-    const result = await client.callTool({ name: "get-instructions" });
+  it("returns instructions from get_instructions tool", async () => {
+    const result = await client.callTool({ name: "get_instructions" });
     expect(result.content).toHaveLength(1);
     const text = (result.content as Array<{ type: string; text: string }>)[0];
     expect(text.type).toBe("text");
