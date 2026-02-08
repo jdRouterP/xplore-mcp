@@ -62,4 +62,74 @@ describe("TokenDb.search", () => {
     const results = db.search("ETH");
     expect(results[0].symbol).toBe("ETH");
   });
+
+  // Lowercase address tests
+  it("EVM address lookup works with checksummed (mixed-case) input", () => {
+    const results = db.search("0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48");
+    expect(results.length).toBe(1);
+    expect(results[0].symbol).toBe("USDC");
+  });
+
+  it("EVM address lookup works with all-uppercase hex", () => {
+    const results = db.search("0xA0B86991C6218B36C1D19D4A2E9EB0CE3606EB48");
+    expect(results.length).toBe(1);
+    expect(results[0].symbol).toBe("USDC");
+  });
+
+  it("zero address finds native tokens on specific chain", () => {
+    const results = db.search("0x0000000000000000000000000000000000000000", "1");
+    expect(results.length).toBe(1);
+    expect(results[0].symbol).toBe("ETH");
+  });
+
+  it("zero address without chain filter returns all native tokens", () => {
+    const results = db.search("0x0000000000000000000000000000000000000000");
+    expect(results.length).toBeGreaterThan(1);
+    expect(results.every((t) => t.address === "0x0000000000000000000000000000000000000000")).toBe(true);
+  });
+
+  // Partial match tests
+  it("partial name match is case-insensitive", () => {
+    const results = db.search("TETHER");
+    expect(results.length).toBeGreaterThan(0);
+    expect(results.every((t) => t.symbol === "USDT")).toBe(true);
+  });
+
+  it("single-char query matches symbol prefix", () => {
+    const results = db.search("U");
+    expect(results.length).toBeGreaterThan(0);
+    expect(results.every((t) => t.symbol.startsWith("U"))).toBe(true);
+  });
+
+  it("name substring 'coin' matches USD Coin", () => {
+    const results = db.search("coin");
+    expect(results.length).toBeGreaterThan(0);
+    expect(results.every((t) => t.name.toLowerCase().includes("coin"))).toBe(true);
+  });
+
+  // Invalid address validation — should not match anything
+  it("truncated EVM address (too short) returns no results", () => {
+    const results = db.search("0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb");
+    expect(results).toEqual([]);
+  });
+
+  it("extended EVM address (too long) returns no results", () => {
+    const results = db.search("0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48ff");
+    expect(results).toEqual([]);
+  });
+
+  it("EVM address missing 0x prefix returns no results", () => {
+    const results = db.search("a0b86991c6218b36c1d19d4a2e9eb0ce3606eb48");
+    expect(results).toEqual([]);
+  });
+
+  it("invalid hex chars in EVM address returns no results", () => {
+    const results = db.search("0xZ0b86991c6218b36c1d19d4a2e9eb0ce3606eb48");
+    expect(results).toEqual([]);
+  });
+
+  it("truncated Solana address returns no results", () => {
+    const results = db.search("EPjFWdd5AufqSSqeM2qN1x");
+    expect(results).toEqual([]);
+  });
 });
