@@ -10,55 +10,88 @@
 
 A Model Context Protocol (MCP) server for the [deBridge](https://debridge.finance) protocol — enabling AI agents to find optimal cross-chain swap routes, check fees and conditions, and initiate trades across major blockchain networks.
 
-## Supported Agent Frameworks
+## Agent Frameworks Setup
 
-This MCP server works with any framework that supports the Model Context Protocol:
+> **Note:** Currently only frameworks with a `stdio` JavaScript runtime are supported. An HTTPS endpoint is planned for a future release.
 
-- [Claude Code](https://github.com/anthropics/claude-code) & [Claude Desktop](https://claude.ai/download)
-- [Cursor](https://cursor.sh)
-- [Windsurf](https://codeium.com/windsurf)
-- [Cline](https://github.com/cline/cline)
-- [Continue](https://continue.dev)
-- [Zed](https://zed.dev)
-
-## Installation
+Clone the repository and build the project:
 
 ```bash
+git clone https://github.com/debridge-finance/debridge-mcp.git
+cd debridge-mcp
 npm install
 npm run build
 ```
 
-## Usage
-
-### With Claude Code
-
-Add to `~/.claude/claude_code_config.json`:
+Then add the following MCP server configuration to your agent (via UI, config file, or CLI):
 
 ```json
-{
-  "mcpServers": {
-    "debridge": {
-      "command": "node",
-      "args": ["/path/to/debridge-mcp/dist/index.js"]
-    }
-  }
+"debridge": {
+  "type": "stdio",
+  "command": "node",
+  "args": ["/full/path/to/debridge-mcp/dist/index.js"]
 }
 ```
 
-### With Claude Desktop
+<details>
+<summary>Claude Code</summary>
 
-Add to your Claude Desktop config (`~/Library/Application Support/Claude/claude_desktop_config.json` on macOS):
+Add the MCP server:
 
-```json
-{
-  "mcpServers": {
-    "debridge": {
-      "command": "node",
-      "args": ["/path/to/debridge-mcp/dist/index.js"]
-    }
-  }
-}
+```bash
+claude mcp add debridge node /full/path/to/debridge-mcp/dist/index.js
 ```
+
+Verify the connection:
+
+```bash
+claude mcp list
+```
+
+</details>
+
+<details>
+<summary>Claude Desktop</summary>
+
+TBD
+
+</details>
+
+<details>
+<summary>Cursor</summary>
+
+TBD
+
+</details>
+
+<details>
+<summary>Windsurf</summary>
+
+TBD
+
+</details>
+
+<details>
+<summary>Cline</summary>
+
+TBD
+
+</details>
+
+<details>
+<summary>Continue</summary>
+
+TBD
+
+</details>
+
+<details>
+<summary>Zed</summary>
+
+TBD
+
+</details>
+
 
 ## Development
 
