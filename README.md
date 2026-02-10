@@ -12,9 +12,16 @@ A Model Context Protocol (MCP) server for the [deBridge](https://debridge.com) p
 
 https://github.com/user-attachments/assets/8ebe88ff-db3c-455e-9efb-50389e4bf5bd
 
-## Agent Frameworks Setup
+## Transport Modes
 
-> **Requires Node.js installed locally.** Streamable HTTP(s) transport is not yet available yet — [follow this issue](https://github.com/debridge-finance/debridge-mcp/issues/1) for updates.
+The deBridge MCP server supports two transport modes for local deployment:
+
+- **stdio** (default) - Requires Node.js/npm. For local agent frameworks and CLI tools via standard input/output
+- **HTTP streaming** - Requires Docker OR Node.js/npm. For containerized deployments and web-based agents
+
+## Setup
+
+### Installation
 
 Clone and build:
 
@@ -25,7 +32,34 @@ npm install
 npm run build
 ```
 
-Then add the following MCP server configuration to your agent (via UI, config file, or CLI):
+### Running the Server
+
+**JS stdio mode**:
+```bash
+npm start
+# or for development
+npm run dev
+```
+
+**JS HTTP mode**:
+```bash
+npm run start:http
+# or for development with auto-reload
+npm run dev:http
+
+# Custom port
+MCP_TRANSPORT=http PORT=3001 npm start
+```
+
+**Docker HTTP mode**:
+```bash
+docker build -t debridge-mcp .
+docker run -p 3000:3000 debridge-mcp
+```
+
+### Configuration for Agent Frameworks
+
+**stdio configuration** (for local agents):
 
 ```json
 "debridge": {
@@ -35,6 +69,14 @@ Then add the following MCP server configuration to your agent (via UI, config fi
 }
 ```
 
+**Streamable HTTP**:
+
+```json
+"debridge": {
+  "type": "streamable-http",
+  "url": "http://localhost:3001/mcp"
+}
+```
 
 
 <details>
@@ -44,6 +86,8 @@ Add the MCP server:
 
 ```bash
 claude mcp add debridge node /full/path/to/debridge-mcp/dist/index.js
+# OR
+claude mcp add debridge http://127.0.0.1:3000/mcp
 ```
 
 Verify the connection:
