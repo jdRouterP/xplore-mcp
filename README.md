@@ -14,9 +14,9 @@ https://github.com/user-attachments/assets/8ebe88ff-db3c-455e-9efb-50389e4bf5bd
 
 ## Agent Frameworks Setup
 
-> **Note:** Currently only frameworks with a `stdio` JavaScript runtime are supported. An HTTPS endpoint is planned for a future release.
+> **Requires Node.js installed locally.** Streamable HTTP(s) transport is not yet available yet — [follow this issue](https://github.com/debridge-finance/debridge-mcp/issues/1) for updates.
 
-Clone the repository and build the project:
+Clone and build:
 
 ```bash
 git clone https://github.com/debridge-finance/debridge-mcp.git
@@ -35,8 +35,10 @@ Then add the following MCP server configuration to your agent (via UI, config fi
 }
 ```
 
+
+
 <details>
-<summary>Claude Code</summary>
+<summary>Claude Code (CLI & IDE plugins)</summary>
 
 Add the MCP server:
 
@@ -52,48 +54,186 @@ claude mcp list
 
 </details>
 
-<details>
-<summary>Claude Desktop</summary>
 
-TBD
+<details>
+<summary>OpenClaw (via mcp-adapter plugin)</summary>
+
+Install the [mcp-adapter](https://github.com/androidStern-personal/openclaw-mcp-adapter) plugin:
+```bash
+openclaw plugins install mcp-adapter
+```
+
+Add to `~/.openclaw/openclaw.json`:
+```json
+{
+  "plugins": {
+    "entries": {
+      "mcp-adapter": {
+        "enabled": true,
+        "config": {
+          "servers": [
+            {
+              "name": "debridge",
+              "transport": "stdio",
+              "command": "node",
+              "args": ["/full/path/to/debridge-mcp/dist/index.js"]
+            }
+          ]
+        }
+      }
+    }
+  }
+}
+```
+
+Add `"mcp-adapter"` to your sandbox allowlist and restart:
+```bash
+openclaw gateway restart
+```
+
+Verify the connection:
+```bash
+openclaw plugins list
+```
+
+</details>
+
+<details>
+<summary>GitHub Copilot (VS Code Chat)</summary>
+
+Add to `.vscode/mcp.json` in your workspace:
+
+```json
+{
+  "mcpServers": {
+    "debridge": {
+      "type": "stdio",
+      "command": "node",
+      "args": ["/full/path/to/debridge-mcp/dist/index.js"]
+    }
+  }
+}
+```
+
+</details>
+
+<details>
+<summary>Claude Web & Desktop Apps</summary>
+
+Not supported until [Streamable HTTP](https://github.com/debridge-finance/debridge-mcp/issues/1) is implemented.
 
 </details>
 
 <details>
 <summary>Cursor</summary>
 
-TBD
+Add to `.cursor/mcp.json` in your project or `~/.cursor/mcp.json` globally:
+
+```json
+{
+  "mcpServers": {
+    "debridge": {
+      "command": "node",
+      "args": ["/full/path/to/debridge-mcp/dist/index.js"]
+    }
+  }
+}
+```
 
 </details>
 
 <details>
 <summary>Windsurf</summary>
 
-TBD
+Add to `~/.codeium/windsurf/mcp_config.json`:
+
+```json
+{
+  "mcpServers": {
+    "debridge": {
+      "command": "node",
+      "args": ["/full/path/to/debridge-mcp/dist/index.js"]
+    }
+  }
+}
+```
 
 </details>
 
 <details>
 <summary>Cline</summary>
 
-TBD
+Open Cline settings in VS Code, go to MCP Servers, click "Edit MCP Settings" and add:
+
+```json
+{
+  "mcpServers": {
+    "debridge": {
+      "command": "node",
+      "args": ["/full/path/to/debridge-mcp/dist/index.js"]
+    }
+  }
+}
+```
 
 </details>
 
 <details>
 <summary>Continue</summary>
 
-TBD
+Add to `~/.continue/config.json`:
+
+```json
+{
+  "mcpServers": [
+    {
+      "name": "debridge",
+      "command": "node",
+      "args": ["/full/path/to/debridge-mcp/dist/index.js"]
+    }
+  ]
+}
+```
 
 </details>
 
 <details>
 <summary>Zed</summary>
 
-TBD
+Add to your Zed settings (`~/.config/zed/settings.json`):
+
+```json
+{
+  "context_servers": {
+    "debridge": {
+      "command": {
+        "path": "node",
+        "args": ["/full/path/to/debridge-mcp/dist/index.js"]
+      }
+    }
+  }
+}
+```
 
 </details>
 
+<details>
+<summary>OpenClaw</summary>
+
+Add to your OpenClaw config (`~/.openclaw/mcp.json`):
+
+```json
+{
+  "mcpServers": {
+    "debridge": {
+      "command": "node",
+      "args": ["/full/path/to/debridge-mcp/dist/index.js"]
+    }
+  }
+}
+```
+
+</details>
 
 ## Development
 
