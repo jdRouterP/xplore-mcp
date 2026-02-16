@@ -12,7 +12,8 @@
     "start:http": "MCP_TRANSPORT=http node dist/index.js",
     "inspect": "npx @modelcontextprotocol/inspector tsx src/index.ts",
     "test": "vitest run",
-    "test:watch": "vitest"
+    "test:watch": "vitest",
+    "api-validate": "tsx scripts/api-validate.ts"
   },
   "keywords": [
     "debridge",

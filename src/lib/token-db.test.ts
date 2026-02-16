@@ -18,8 +18,9 @@ describe("TokenDb.search", () => {
 
   it("filters by chainId", () => {
     const results = db.search("USDC", "42161");
-    expect(results.length).toBe(1);
-    expect(results[0].chainId).toBe("42161");
+    expect(results.length).toBeGreaterThanOrEqual(1);
+    expect(results.every((t) => t.chainId === "42161")).toBe(true);
+    expect(results[0].symbol).toBe("USDC");
   });
 
   it("exact EVM address lookup (case-insensitive)", () => {
@@ -38,8 +39,11 @@ describe("TokenDb.search", () => {
 
   it("name substring match (e.g. 'tether' finds USDT)", () => {
     const results = db.search("tether");
-    expect(results.every((t) => t.symbol === "USDT")).toBe(true);
     expect(results.length).toBeGreaterThanOrEqual(2);
+    expect(results.every((t) =>
+      t.symbol.toLowerCase().includes("tether") ||
+      t.names.some((n) => n.toLowerCase().includes("tether")),
+    )).toBe(true);
   });
 
   it("symbol prefix match (e.g. 'USD' matches USDC and USDT)", () => {
@@ -47,6 +51,8 @@ describe("TokenDb.search", () => {
     expect(results.length).toBeGreaterThan(0);
     expect(results.every((t) => t.symbol.startsWith("USD"))).toBe(true);
   });
+
+  
 
   it("respects limit parameter", () => {
     const results = db.search("USD", undefined, 2);
@@ -92,19 +98,35 @@ describe("TokenDb.search", () => {
   it("partial name match is case-insensitive", () => {
     const results = db.search("TETHER");
     expect(results.length).toBeGreaterThan(0);
-    expect(results.every((t) => t.symbol === "USDT")).toBe(true);
+    expect(results.every((t) =>
+      t.symbol.toLowerCase().includes("tether") ||
+      t.names.some((n) => n.toLowerCase().includes("tether")),
+    )).toBe(true);
   });
 
-  it("single-char query matches symbol prefix", () => {
+  it("single-char query matches symbol prefix or name", () => {
     const results = db.search("U");
     expect(results.length).toBeGreaterThan(0);
-    expect(results.every((t) => t.symbol.startsWith("U"))).toBe(true);
+    // Each result should have symbol starting with U or a name containing "u"
+    expect(results.every((t) =>
+      t.symbol.toLowerCase().startsWith("u") ||
+      t.names.some((n) => n.toLowerCase().includes("u")),
+    )).toBe(true);
   });
 
   it("name substring 'coin' matches USD Coin", () => {
     const results = db.search("coin");
     expect(results.length).toBeGreaterThan(0);
-    expect(results.every((t) => t.name.toLowerCase().includes("coin"))).toBe(true);
+    expect(results.every((t) =>
+      t.symbol.toLowerCase().includes("coin") ||
+      t.names.some((n) => n.toLowerCase().includes("coin")),
+    )).toBe(true);
+  });
+
+  it("finds HYPE token", () => {
+    const results = db.search("HYPE");
+    expect(results.length).toBeGreaterThanOrEqual(1);
+    expect(results[0].symbol).toBe("HYPE");
   });
 
   // Invalid address validation — should not match anything

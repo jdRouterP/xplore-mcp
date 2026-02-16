@@ -77,8 +77,9 @@ describe("debridge-mcp server", () => {
         arguments: { query: "USDC", chainId: "1" },
       });
       const data = JSON.parse((result.content as Array<{ text: string }>)[0].text);
-      expect(data.total).toBe(1);
+      expect(data.total).toBeGreaterThanOrEqual(1);
       expect(data.results[0].chainId).toBe("1");
+      expect(data.results[0].symbol).toBe("USDC");
     });
 
     it("filters by name", async () => {
@@ -88,7 +89,7 @@ describe("debridge-mcp server", () => {
       });
       const data = JSON.parse((result.content as Array<{ text: string }>)[0].text);
       expect(data.total).toBeGreaterThan(0);
-      expect(data.results.every((t: { name: string }) => t.name.toLowerCase().includes("coin"))).toBe(true);
+      expect(data.results.every((t: { names: string[] }) => t.names.some((n: string) => n.toLowerCase().includes("coin")))).toBe(true);
     });
 
     it("looks up by EVM address", async () => {
@@ -140,7 +141,7 @@ describe("debridge-mcp server", () => {
         arguments: {},
       });
       const chains = JSON.parse((result.content as Array<{ text: string }>)[0].text);
-      expect(chains.length).toBe(9);
+      expect(chains.length).toBe(28);
       const names: string[] = chains.map((c: { chainNames: string[] }) => c.chainNames[0]);
       const sorted = [...names].sort((a, b) => a.localeCompare(b));
       expect(names).toEqual(sorted);

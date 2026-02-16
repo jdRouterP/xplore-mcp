@@ -50,11 +50,11 @@ export class TokenDb {
 
     for (const t of pool) {
       const sym = t.symbol.toLowerCase();
-      const name = t.name.toLowerCase();
+      const namesLower = t.names.map((n) => n.toLowerCase());
       if (sym === q) exactSymbol.push(t);
-      else if (name === q) exactName.push(t);
+      else if (namesLower.some((n) => n === q)) exactName.push(t);
       else if (sym.startsWith(q)) symbolPrefix.push(t);
-      else if (name.includes(q)) nameSubstring.push(t);
+      else if (namesLower.some((n) => n.includes(q))) nameSubstring.push(t);
     }
 
     const byChain = (a: TokenEntry, b: TokenEntry) =>

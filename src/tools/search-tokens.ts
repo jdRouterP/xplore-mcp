@@ -25,7 +25,9 @@ export function registerSearchTokens(server: McpServer, tokenDb: TokenDb) {
       let results = tokenDb.search(query, chainId, limit);
       if (name) {
         const lower = name.toLowerCase();
-        results = results.filter((t) => t.name.toLowerCase().includes(lower));
+        results = results.filter((t) =>
+          t.names.some((n) => n.toLowerCase().includes(lower)),
+        );
       }
       return {
         content: [
