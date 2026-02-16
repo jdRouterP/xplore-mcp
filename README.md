@@ -87,7 +87,7 @@ Add the MCP server:
 ```bash
 claude mcp add debridge node /full/path/to/debridge-mcp/dist/index.js
 # OR
-claude mcp add debridge http://127.0.0.1:3000/mcp
+claude mcp add debridge --transport http http://127.0.0.1:3000/mcp
 ```
 
 Verify the connection:
