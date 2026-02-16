@@ -42,7 +42,11 @@ if (process.env.MCP_TRANSPORT === "http") {
     });
   });
 
-  app.listen(port, host, () => {
+  app.listen(port, host, (err?: Error) => {
+    if (err) {
+      console.error(`Failed to start server: ${err.message}`);
+      process.exit(1);
+    }
     console.error(`deBridge MCP server running on http://${host}:${port}/mcp`);
   });
 } else {
