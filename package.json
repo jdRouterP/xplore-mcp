@@ -1,5 +1,5 @@
 {
-  "name": "debridge-mcp",
+  "name": "@debridge-finance/debridge-mcp",
   "version": "0.1.0",
   "description": "deBridge MCP server",
   "type": "module",
@@ -26,6 +26,9 @@
   ],
   "author": "deBridge",
   "license": "MIT",
+  "publishConfig": {
+    "access": "public"
+  },
   "dependencies": {
     "@modelcontextprotocol/sdk": "^1.26.0",
     "express": "^5.2.1",
