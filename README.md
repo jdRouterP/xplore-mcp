@@ -27,7 +27,7 @@ The deBridge MCP server supports two transport modes for local deployment:
 Run directly without installation:
 
 ```bash
-npx @debridge-finance/debridge-mcp
+npx -y @debridge-finance/debridge-mcp@latest
 ```
 
 ### Installation from Source
@@ -45,19 +45,19 @@ npm run build
 
 **stdio mode** (default):
 ```bash
-npx @debridge-finance/debridge-mcp
+npx -y @debridge-finance/debridge-mcp@latest
 # or from a cloned repo
 npm start
 ```
 
 **HTTP mode**:
 ```bash
-MCP_TRANSPORT=http npx @debridge-finance/debridge-mcp
+MCP_TRANSPORT=http npx -y @debridge-finance/debridge-mcp@latest
 # or from a cloned repo
 npm run start:http
 
 # Custom port
-MCP_TRANSPORT=http PORT=3001 npx @debridge-finance/debridge-mcp
+MCP_TRANSPORT=http PORT=3001 npx -y @debridge-finance/debridge-mcp@latest
 ```
 
 **Docker HTTP mode**:
@@ -74,7 +74,7 @@ docker run -p 3000:3000 debridge-mcp
 "debridge": {
   "type": "stdio",
   "command": "npx",
-  "args": ["@debridge-finance/debridge-mcp"]
+  "args": ["-y", "@debridge-finance/debridge-mcp@latest"]
 }
 ```
 
@@ -94,7 +94,7 @@ docker run -p 3000:3000 debridge-mcp
 Add the MCP server:
 
 ```bash
-claude mcp add debridge npx @debridge-finance/debridge-mcp
+claude mcp add debridge npx -- -y @debridge-finance/debridge-mcp@latest
 # OR
 claude mcp add debridge --transport http http://127.0.0.1:3000/mcp
 ```
@@ -129,7 +129,7 @@ Add to `~/.openclaw/openclaw.json`:
               "name": "debridge",
               "transport": "stdio",
               "command": "npx",
-              "args": ["@debridge-finance/debridge-mcp"]
+              "args": ["-y", "@debridge-finance/debridge-mcp@latest"]
             }
           ]
         }
@@ -162,7 +162,7 @@ Add to `.vscode/mcp.json` in your workspace:
     "debridge": {
       "type": "stdio",
       "command": "npx",
-      "args": ["@debridge-finance/debridge-mcp"]
+      "args": ["-y", "@debridge-finance/debridge-mcp@latest"]
     }
   }
 }
@@ -187,7 +187,7 @@ Add to `.cursor/mcp.json` in your project or `~/.cursor/mcp.json` globally:
   "mcpServers": {
     "debridge": {
       "command": "npx",
-      "args": ["@debridge-finance/debridge-mcp"]
+      "args": ["-y", "@debridge-finance/debridge-mcp@latest"]
     }
   }
 }
@@ -205,7 +205,7 @@ Add to `~/.codeium/windsurf/mcp_config.json`:
   "mcpServers": {
     "debridge": {
       "command": "npx",
-      "args": ["@debridge-finance/debridge-mcp"]
+      "args": ["-y", "@debridge-finance/debridge-mcp@latest"]
     }
   }
 }
@@ -223,7 +223,7 @@ Open Cline settings in VS Code, go to MCP Servers, click "Edit MCP Settings" and
   "mcpServers": {
     "debridge": {
       "command": "npx",
-      "args": ["@debridge-finance/debridge-mcp"]
+      "args": ["-y", "@debridge-finance/debridge-mcp@latest"]
     }
   }
 }
@@ -242,7 +242,7 @@ Add to `~/.continue/config.json`:
     {
       "name": "debridge",
       "command": "npx",
-      "args": ["@debridge-finance/debridge-mcp"]
+      "args": ["-y", "@debridge-finance/debridge-mcp@latest"]
     }
   ]
 }
@@ -261,7 +261,7 @@ Add to your Zed settings (`~/.config/zed/settings.json`):
     "debridge": {
       "command": {
         "path": "npx",
-        "args": ["@debridge-finance/debridge-mcp"]
+        "args": ["-y", "@debridge-finance/debridge-mcp@latest"]
       }
     }
   }
@@ -280,7 +280,7 @@ Add to your OpenClaw config (`~/.openclaw/mcp.json`):
   "mcpServers": {
     "debridge": {
       "command": "npx",
-      "args": ["@debridge-finance/debridge-mcp"]
+      "args": ["-y", "@debridge-finance/debridge-mcp@latest"]
     }
   }
 }
