@@ -107,6 +107,28 @@ claude mcp list
 
 </details>
 
+<details>
+<summary>Cursor</summary>
+
+Use Cursor Deeplink: [![Install MCP Server](https://cursor.com/deeplink/mcp-install-dark.svg)](https://cursor.com/en-US/install-mcp?name=debridge&config=eyJjb21tYW5kIjoibnB4IC15IEBkZWJyaWRnZS1maW5hbmNlL2RlYnJpZGdlLW1jcEBsYXRlc3QifQ%3D%3D)
+
+OR install from [Cursor Directory](https://cursor.directory/mcp/debridge)
+
+OR add to `.cursor/mcp.json` in your project or `~/.cursor/mcp.json` globally:
+
+```json
+{
+  "mcpServers": {
+    "debridge": {
+      "command": "npx",
+      "args": ["-y", "@debridge-finance/debridge-mcp@latest"]
+    }
+  }
+}
+```
+
+</details>
+
 
 <details>
 <summary>OpenClaw (via mcp-adapter plugin)</summary>
@@ -174,24 +196,6 @@ Add to `.vscode/mcp.json` in your workspace:
 <summary>Claude Web & Desktop Apps</summary>
 
 Not supported until [Streamable HTTP](https://github.com/debridge-finance/debridge-mcp/issues/1) is implemented.
-
-</details>
-
-<details>
-<summary>Cursor</summary>
-
-Add to `.cursor/mcp.json` in your project or `~/.cursor/mcp.json` globally:
-
-```json
-{
-  "mcpServers": {
-    "debridge": {
-      "command": "npx",
-      "args": ["-y", "@debridge-finance/debridge-mcp@latest"]
-    }
-  }
-}
-```
 
 </details>
 
