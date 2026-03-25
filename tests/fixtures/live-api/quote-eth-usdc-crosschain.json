@@ -1,0 +1,173 @@
+{
+    "id": "11f0b29f-9ad1-49d7-adf4-d6a76d51c544",
+    "type": "lifi",
+    "tool": "kyberswap",
+    "toolDetails": {
+        "key": "kyberswap",
+        "name": "Kyberswap"
+    },
+    "action": {
+        "fromChainId": "1",
+        "toChainId": "42161",
+        "fromToken": {
+            "address": "0x0000000000000000000000000000000000000000",
+            "chainId": "1",
+            "symbol": "ETH",
+            "decimals": 18,
+            "name": "ETH",
+            "priceUsd": "2153.26",
+            "logoUri": "https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/assets/0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2/logo.png"
+        },
+        "toToken": {
+            "address": "0xaf88d065e77c8cC2239327C5EDb3A432268e5831",
+            "chainId": "42161",
+            "symbol": "USDC",
+            "decimals": 18,
+            "name": "USD Coin",
+            "priceUsd": "0.99986",
+            "logoUri": "https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/assets/0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48/logo.png"
+        },
+        "fromAmount": "1000000000000000000",
+        "slippage": 0.03,
+        "fromAddress": "0xd8dA6BF26964aF9D7eEd9e03E53415D37aA96045",
+        "toAddress": "0xd8dA6BF26964aF9D7eEd9e03E53415D37aA96045"
+    },
+    "estimate": {
+        "tool": "kyberswap",
+        "approvalAddress": "0xc026395860db2d07ee33e05fe50ed7bd583189c7",
+        "toAmountMin": "2033570875400000000000",
+        "toAmount": "2096464820000000000000",
+        "fromAmount": "1000000000000000000",
+        "feeCosts": [
+            {
+                "name": "Protocol Fee",
+                "description": "Xplore protocol fee",
+                "token": {
+                    "address": "0x0000000000000000000000000000000000000000",
+                    "chainId": "1",
+                    "symbol": "ETH",
+                    "decimals": 18,
+                    "name": "ETH",
+                    "priceUsd": "2153.26",
+                    "logoUri": "https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/assets/0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2/logo.png"
+                },
+                "amount": "100000000000000",
+                "included": true
+            }
+        ],
+        "gasCosts": [
+            {
+                "type": "SEND",
+                "price": "20000000000",
+                "estimate": "587431",
+                "limit": "881146",
+                "amount": "11748620000000000",
+                "token": {
+                    "address": "0x0000000000000000000000000000000000000000",
+                    "chainId": "1",
+                    "symbol": "ETH",
+                    "decimals": 18,
+                    "name": "Ethereum"
+                }
+            }
+        ],
+        "executionDuration": 20.0
+    },
+    "includedSteps": [
+        {
+            "id": "57336eb0-5b8c-466b-bafb-cf62cab824b8",
+            "type": "swap",
+            "tool": "kyberswap",
+            "toolDetails": {
+                "key": "kyberswap",
+                "name": "Kyberswap"
+            },
+            "action": {
+                "fromChainId": "1",
+                "toChainId": "1",
+                "fromToken": {
+                    "address": "0x0000000000000000000000000000000000000000",
+                    "chainId": "1",
+                    "symbol": "ETH",
+                    "decimals": 18,
+                    "name": "ETH",
+                    "priceUsd": "2153.26",
+                    "logoUri": "https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/assets/0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2/logo.png"
+                },
+                "toToken": {
+                    "address": "0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48",
+                    "chainId": "1",
+                    "symbol": "USDC",
+                    "decimals": 6,
+                    "name": "USD Coin",
+                    "priceUsd": "0.99986",
+                    "logoUri": "https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/assets/0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48/logo.png"
+                },
+                "fromAmount": "999900000000000000",
+                "slippage": 0.03,
+                "fromAddress": "0xd8dA6BF26964aF9D7eEd9e03E53415D37aA96045",
+                "toAddress": "0xd8dA6BF26964aF9D7eEd9e03E53415D37aA96045"
+            },
+            "estimate": {
+                "tool": "kyberswap",
+                "toAmountMin": "2097725554",
+                "toAmount": "2097725554",
+                "fromAmount": "999900000000000000",
+                "feeCosts": [],
+                "gasCosts": []
+            }
+        },
+        {
+            "id": "3514c18e-fd4b-4a9b-8937-1f78bf8be0df",
+            "type": "bridge",
+            "tool": "stargate_taxi",
+            "toolDetails": {
+                "key": "stargate_taxi",
+                "name": "Stargate Taxi"
+            },
+            "action": {
+                "fromChainId": "1",
+                "toChainId": "42161",
+                "fromToken": {
+                    "address": "0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48",
+                    "chainId": "1",
+                    "symbol": "USDC",
+                    "decimals": 6,
+                    "name": "USD Coin",
+                    "priceUsd": "0.99986",
+                    "logoUri": "https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/assets/0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48/logo.png"
+                },
+                "toToken": {
+                    "address": "0xaf88d065e77c8cC2239327C5EDb3A432268e5831",
+                    "chainId": "42161",
+                    "symbol": "USDC",
+                    "decimals": 18,
+                    "name": "USD Coin",
+                    "priceUsd": "0.99986",
+                    "logoUri": "https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/assets/0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48/logo.png"
+                },
+                "fromAmount": "2097725554",
+                "slippage": 0.03,
+                "fromAddress": "0xd8dA6BF26964aF9D7eEd9e03E53415D37aA96045",
+                "toAddress": "0xd8dA6BF26964aF9D7eEd9e03E53415D37aA96045"
+            },
+            "estimate": {
+                "tool": "stargate_taxi",
+                "toAmountMin": "2096464820000000000000",
+                "toAmount": "2096464820000000000000",
+                "fromAmount": "2097725554",
+                "feeCosts": [],
+                "gasCosts": []
+            }
+        }
+    ],
+    "transactionRequest": {
+        "from": "0xd8dA6BF26964aF9D7eEd9e03E53415D37aA96045",
+        "to": "0xc026395860db2d07ee33e05fe50ed7bd583189c7",
+        "chainId": "1",
+        "data": "0xc7c7f5b300000000000000000000000000000000000000000000000000000000000000800000000000000000000000000000000000000000000000000000285931a45eba0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000d8da6bf26964af9d7eed9e03e53415d37aa96045000000000000000000000000000000000000000000000000000000000000759e000000000000000000000000d8da6bf26964af9d7eed9e03e53415d37aa96045000000000000000000000000000000000000000000000000000000007d08c072000000000000000000000000000000000000000000000000000000007cf583b400000000000000000000000000000000000000000000000000000000000000e000000000000000000000000000000000000000000000000000000000000001000000000000000000000000000000000000000000000000000000000000000120000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000",
+        "value": "44363550056122",
+        "gasLimit": "587431"
+    },
+    "tags": []
+}

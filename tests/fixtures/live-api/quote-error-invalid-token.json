@@ -1,0 +1,5 @@
+{
+    "status": 504,
+    "code": "TIMEOUT",
+    "message": "No batches completed successfully within the 30000ms timeout"
+}

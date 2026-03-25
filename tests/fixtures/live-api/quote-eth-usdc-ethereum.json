@@ -1,0 +1,114 @@
+{
+    "id": "57b5236f-cc70-4dda-8a75-1c8097d79db8",
+    "type": "lifi",
+    "tool": "thorchain",
+    "toolDetails": {
+        "key": "thorchain",
+        "name": "Thorchain"
+    },
+    "action": {
+        "fromChainId": "1",
+        "toChainId": "1",
+        "fromToken": {
+            "address": "0x0000000000000000000000000000000000000000",
+            "chainId": "1",
+            "symbol": "ETH",
+            "decimals": 18,
+            "name": "ETH",
+            "priceUsd": "2153.26",
+            "logoUri": "https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/assets/0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2/logo.png"
+        },
+        "toToken": {
+            "address": "0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48",
+            "chainId": "1",
+            "symbol": "USDC",
+            "decimals": 6,
+            "name": "USD Coin",
+            "priceUsd": "0.99986",
+            "logoUri": "https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/assets/0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48/logo.png"
+        },
+        "fromAmount": "1000000000000000000",
+        "slippage": 0.03,
+        "fromAddress": "0xd8dA6BF26964aF9D7eEd9e03E53415D37aA96045",
+        "toAddress": "0xd8dA6BF26964aF9D7eEd9e03E53415D37aA96045"
+    },
+    "estimate": {
+        "tool": "thorchain",
+        "approvalAddress": "0xD37BbE5744D730a1d98d8DC97c42F0Ca46aD7146",
+        "toAmountMin": "2088734647",
+        "toAmount": "2153334687",
+        "fromAmount": "1000000000000000000",
+        "feeCosts": [
+            {
+                "name": "Protocol Fee",
+                "description": "Xplore protocol fee",
+                "token": {
+                    "address": "0x0000000000000000000000000000000000000000",
+                    "chainId": "1",
+                    "symbol": "ETH",
+                    "decimals": 18,
+                    "name": "ETH",
+                    "priceUsd": "2153.26",
+                    "logoUri": "https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/assets/0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2/logo.png"
+                },
+                "amount": "100000000000000",
+                "included": true
+            }
+        ],
+        "gasCosts": [],
+        "executionDuration": 54.0
+    },
+    "includedSteps": [
+        {
+            "id": "446539d8-e5d5-4e3b-b25e-c1366786e844",
+            "type": "bridge",
+            "tool": "thorchain",
+            "toolDetails": {
+                "key": "thorchain",
+                "name": "Thorchain"
+            },
+            "action": {
+                "fromChainId": "1",
+                "toChainId": "1",
+                "fromToken": {
+                    "address": "0x0000000000000000000000000000000000000000",
+                    "chainId": "1",
+                    "symbol": "ETH",
+                    "decimals": 18,
+                    "name": "ETH",
+                    "priceUsd": "2153.26",
+                    "logoUri": "https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/assets/0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2/logo.png"
+                },
+                "toToken": {
+                    "address": "0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48",
+                    "chainId": "1",
+                    "symbol": "USDC",
+                    "decimals": 6,
+                    "name": "USD Coin",
+                    "priceUsd": "0.99986",
+                    "logoUri": "https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/assets/0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48/logo.png"
+                },
+                "fromAmount": "999900000000000000",
+                "slippage": 0.03,
+                "fromAddress": "0xd8dA6BF26964aF9D7eEd9e03E53415D37aA96045",
+                "toAddress": "0xd8dA6BF26964aF9D7eEd9e03E53415D37aA96045"
+            },
+            "estimate": {
+                "tool": "thorchain",
+                "toAmountMin": "2153334687",
+                "toAmount": "2153334687",
+                "fromAmount": "999900000000000000",
+                "feeCosts": [],
+                "gasCosts": []
+            }
+        }
+    ],
+    "transactionRequest": {
+        "from": "0xd8dA6BF26964aF9D7eEd9e03E53415D37aA96045",
+        "to": "0xD37BbE5744D730a1d98d8DC97c42F0Ca46aD7146",
+        "chainId": "1",
+        "data": "44bc937b000000000000000000000000578f252e36d19059ac07dd2a3894ca9034eb9c4600000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000de05bc096e9c00000000000000000000000000000000000000000000000000000000000000000a00000000000000000000000000000000000000000000000000000000069c409bf00000000000000000000000000000000000000000000000000000000000000353d3a4554482e555344433a3078643864413642463236393634614639443765456439653033453533343135443337614139363034350000000000000000000000",
+        "value": "999900000000000000"
+    },
+    "tags": []
+}

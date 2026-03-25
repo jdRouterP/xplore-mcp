@@ -1,10 +1,21 @@
-import { describe, it, expect, beforeAll } from "vitest";
+import { describe, it, expect, beforeAll, vi, afterAll } from "vitest";
 import request from "supertest";
 import express, { type Express } from "express";
+import { readFileSync } from "node:fs";
+import { resolve, dirname } from "node:path";
+import { fileURLToPath } from "node:url";
 import { StreamableHTTPServerTransport } from "@modelcontextprotocol/sdk/server/streamableHttp.js";
 import { TokenDb } from "../src/lib/token-db.js";
 import { pkg } from "../src/lib/pkg.js";
 import { createServer } from "../src/server.js";
+
+const __dirname = dirname(fileURLToPath(import.meta.url));
+
+function loadFixture(name: string) {
+  return JSON.parse(
+    readFileSync(resolve(__dirname, "fixtures/live-api", name), "utf-8"),
+  );
+}
 
 describe("HTTP Streamable Transport", () => {
   let app: Express;
@@ -12,6 +23,14 @@ describe("HTTP Streamable Transport", () => {
 
   beforeAll(() => {
     tokenDb = TokenDb.load();
+    // Mock fetch for API-dependent tools (get_supported_chains, get_quote, etc.)
+    const chainsFixture = loadFixture("chains-xplore.json");
+    vi.spyOn(globalThis, "fetch").mockResolvedValue(
+      new Response(JSON.stringify(chainsFixture), {
+        status: 200,
+        headers: { "Content-Type": "application/json" },
+      }),
+    );
     app = express();
     app.use(express.json());
 
@@ -31,6 +50,10 @@ describe("HTTP Streamable Transport", () => {
         server.close();
       });
     });
+  });
+
+  afterAll(() => {
+    vi.restoreAllMocks();
   });
 
   describe("MCP Protocol Initialization", () => {
@@ -106,7 +129,8 @@ describe("HTTP Streamable Transport", () => {
       expect(toolNames).toContain("get_instructions");
       expect(toolNames).toContain("search_tokens");
       expect(toolNames).toContain("get_supported_chains");
-      expect(toolNames).toContain("create_tx");
+      expect(toolNames).toContain("get_quote");
+      expect(toolNames).toContain("create_transaction");
       expect(toolNames).toContain("get_trade_dapp_url");
     });
 
@@ -149,7 +173,7 @@ describe("HTTP Streamable Transport", () => {
       expect(response.body.result).toHaveProperty("content");
       expect(Array.isArray(response.body.result.content)).toBe(true);
       expect(response.body.result.content[0]).toHaveProperty("type", "text");
-      expect(response.body.result.content[0].text).toContain("deBridge");
+      expect(response.body.result.content[0].text).toContain("Xplore MCP Server");
     });
 
     it("should execute search_tokens tool", async () => {
@@ -196,11 +220,10 @@ describe("HTTP Streamable Transport", () => {
 
       expect(response.body.result).toHaveProperty("content");
       const chainData = JSON.parse(response.body.result.content[0].text);
-      expect(Array.isArray(chainData)).toBe(true);
-      expect(chainData.length).toBeGreaterThan(0);
-      expect(chainData[0]).toHaveProperty("chainId");
-      expect(chainData[0]).toHaveProperty("chainNames");
-      expect(Array.isArray(chainData[0].chainNames)).toBe(true);
+      expect(chainData).toHaveProperty("chains");
+      expect(Array.isArray(chainData.chains)).toBe(true);
+      expect(chainData.chains.length).toBeGreaterThan(0);
+      expect(chainData.chains[0]).toHaveProperty("name");
     });
 
     it("should handle tool errors gracefully", async () => {

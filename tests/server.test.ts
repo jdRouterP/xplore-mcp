@@ -39,7 +39,7 @@ function setupClient() {
   };
 }
 
-describe("debridge-mcp server", () => {
+describe("xplore-mcp server", () => {
   let ctx: ReturnType<typeof setupClient>;
   let client: Client;
 
@@ -60,7 +60,7 @@ describe("debridge-mcp server", () => {
   it("lists tools", async () => {
     const result = await client.listTools();
     const names = result.tools.map((t) => t.name).sort();
-    expect(names).toEqual(["create_tx", "estimate_same_chain_swap", "get_instructions", "get_supported_chains", "get_trade_dapp_url", "search_tokens"]);
+    expect(names).toEqual(["create_transaction", "get_instructions", "get_quote", "get_supported_chains", "get_trade_dapp_url", "search_tokens"]);
   });
 
   it("returns instructions from get_instructions tool", async () => {
@@ -68,7 +68,7 @@ describe("debridge-mcp server", () => {
     expect(result.content).toHaveLength(1);
     const text = (result.content as Array<{ type: string; text: string }>)[0];
     expect(text.type).toBe("text");
-    expect(text.text).toContain("deBridge MCP Server");
+    expect(text.text).toContain("Xplore MCP Server");
   });
 
   describe("search_tokens", () => {
@@ -146,7 +146,7 @@ describe("debridge-mcp server", () => {
     });
   });
 
-  describe("estimate_same_chain_swap", () => {
+  describe("get_quote", () => {
     afterEach(() => {
       vi.restoreAllMocks();
     });
@@ -161,137 +161,173 @@ describe("debridge-mcp server", () => {
       );
     }
 
-    it("returns error for unknown chain ID without calling API", async () => {
-      const fetchSpy = vi.spyOn(globalThis, "fetch");
+    it("quotes ETH → USDC same-chain swap on Ethereum", async () => {
+      mockFetch("quote-eth-usdc-ethereum.json");
       const result = await client.callTool({
-        name: "estimate_same_chain_swap",
+        name: "get_quote",
         arguments: {
-          chainId: "999999",
-          tokenIn: "0x0000000000000000000000000000000000000000",
-          tokenInAmount: "1000000000000000000",
-          tokenOut: "0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48",
-        },
-      });
-      expect(result.isError).toBe(true);
-      const text = (result.content as Array<{ type: string; text: string }>)[0].text;
-      const data = JSON.parse(text);
-      expect(data.error).toContain("Unknown chain ID");
-      expect(fetchSpy).not.toHaveBeenCalled();
-    });
-
-    it("estimates ETH → USDC swap on Ethereum", async () => {
-      mockFetch("estimation-eth-usdc-ethereum.json");
-      const result = await client.callTool({
-        name: "estimate_same_chain_swap",
-        arguments: {
-          chainId: "1",
-          tokenIn: "0x0000000000000000000000000000000000000000",
-          tokenInAmount: "1000000000000000000",
-          tokenOut: "0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48",
+          fromChain: "1",
+          toChain: "1",
+          fromToken: "0x0000000000000000000000000000000000000000",
+          toToken: "0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48",
+          fromAmount: "1000000000000000000",
+          fromAddress: "0xd8dA6BF26964aF9D7eEd9e03E53415D37aA96045",
+          toAddress: "0xd8dA6BF26964aF9D7eEd9e03E53415D37aA96045",
         },
       });
       expect(result.isError).toBeUndefined();
       const data = JSON.parse((result.content as Array<{ text: string }>)[0].text);
-      expect(data.estimation).toBeDefined();
-      expect(data.estimation.tokenIn.symbol).toBe("ETH");
-      expect(data.estimation.tokenOut.symbol).toBe("USDC");
-      expect(Number(data.estimation.tokenOut.amount)).toBeGreaterThan(0);
+      expect(data.id).toBeDefined();
+      expect(data.action.fromToken.symbol).toBe("ETH");
+      expect(data.action.toToken.symbol).toBe("USDC");
+      expect(data.estimate.toAmount).toBeDefined();
     });
 
-    it("estimates USDC → USDT swap on Arbitrum", async () => {
-      mockFetch("estimation-usdc-usdt-arbitrum.json");
+    it("quotes cross-chain ETH → USDC (Ethereum → Arbitrum)", async () => {
+      mockFetch("quote-eth-usdc-crosschain.json");
       const result = await client.callTool({
-        name: "estimate_same_chain_swap",
+        name: "get_quote",
         arguments: {
-          chainId: "42161",
-          tokenIn: "0xaf88d065e77c8cC2239327C5EDb3A432268e5831",
-          tokenInAmount: "1000000000",
-          tokenOut: "0xFd086bC7CD5C481DCC9C85ebE478A1C0b69FCbb9",
+          fromChain: "1",
+          toChain: "42161",
+          fromToken: "0x0000000000000000000000000000000000000000",
+          toToken: "0xaf88d065e77c8cC2239327C5EDb3A432268e5831",
+          fromAmount: "1000000000000000000",
+          fromAddress: "0xd8dA6BF26964aF9D7eEd9e03E53415D37aA96045",
+          toAddress: "0xd8dA6BF26964aF9D7eEd9e03E53415D37aA96045",
         },
       });
       expect(result.isError).toBeUndefined();
       const data = JSON.parse((result.content as Array<{ text: string }>)[0].text);
-      expect(data.estimation).toBeDefined();
-      expect(data.estimation.tokenIn.symbol).toBe("USDC");
-      expect(data.estimation.tokenOut.symbol).toMatch(/USD[T₮]/);
-      expect(Number(data.estimation.tokenOut.amount)).toBeGreaterThan(0);
+      expect(data.id).toBeDefined();
+      expect(data.action.fromChainId).toBe("1");
+      expect(data.action.toChainId).toBe("42161");
     });
 
-    it("passes explicit slippage to the API", async () => {
-      mockFetch("estimation-eth-usdc-ethereum-slippage1.json");
+    it("returns API error for invalid token", async () => {
+      mockFetch("quote-error-invalid-token.json", 504);
       const result = await client.callTool({
-        name: "estimate_same_chain_swap",
+        name: "get_quote",
         arguments: {
-          chainId: "1",
-          tokenIn: "0x0000000000000000000000000000000000000000",
-          tokenInAmount: "1000000000000000000",
-          tokenOut: "0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48",
-          slippage: "1",
-        },
-      });
-      expect(result.isError).toBeUndefined();
-      const data = JSON.parse((result.content as Array<{ text: string }>)[0].text);
-      expect(data.estimation).toBeDefined();
-      expect(data.estimation.slippage).toBe(1);
-    });
-
-    it("estimates USDM → ETH swap on MegaETH", async () => {
-      mockFetch("estimation-usdm-eth-megaeth.json");
-      const result = await client.callTool({
-        name: "estimate_same_chain_swap",
-        arguments: {
-          chainId: "4326",
-          tokenIn: "0xfafddbb3fc7688494971a79cc65dca3ef82079e7",
-          tokenInAmount: "20000000000000000000",
-          tokenOut: "0x0000000000000000000000000000000000000000",
-        },
-      });
-      expect(result.isError).toBeUndefined();
-      const data = JSON.parse((result.content as Array<{ text: string }>)[0].text);
-      expect(data.estimation).toBeDefined();
-      expect(data.estimation.tokenIn.symbol).toMatch(/USDm/i);
-      expect(Number(data.estimation.tokenOut.amount)).toBeGreaterThan(0);
-    });
-
-    it("returns API error for invalid token address", async () => {
-      mockFetch("estimation-error-invalid-token.json", 400);
-      const result = await client.callTool({
-        name: "estimate_same_chain_swap",
-        arguments: {
-          chainId: "1",
-          tokenIn: "0x0000000000000000000000000000000000000000",
-          tokenInAmount: "1000000000000000000",
-          tokenOut: "0x0000000000000000000000000000000000000001",
+          fromChain: "1",
+          toChain: "1",
+          fromToken: "0x0000000000000000000000000000000000000000",
+          toToken: "0x0000000000000000000000000000000000000001",
+          fromAmount: "1000000000000000000",
+          fromAddress: "0xd8dA6BF26964aF9D7eEd9e03E53415D37aA96045",
+          toAddress: "0xd8dA6BF26964aF9D7eEd9e03E53415D37aA96045",
         },
       });
       expect(result.isError).toBe(true);
       const data = JSON.parse((result.content as Array<{ text: string }>)[0].text);
-      expect(data.statusCode).toBe(400);
+      expect(data.statusCode).toBe(504);
     });
   });
 
   describe("get_supported_chains", () => {
-    it("returns all chains sorted by name", async () => {
-      const result = await client.callTool({
-        name: "get_supported_chains",
-        arguments: {},
-      });
-      const chains = JSON.parse((result.content as Array<{ text: string }>)[0].text);
-      expect(chains.length).toBe(28);
-      const names: string[] = chains.map((c: { chainNames: string[] }) => c.chainNames[0]);
-      const sorted = [...names].sort((a, b) => a.localeCompare(b));
-      expect(names).toEqual(sorted);
+    afterEach(() => {
+      vi.restoreAllMocks();
     });
 
-    it("includes Ethereum and Solana", async () => {
+    it("returns chains from API", async () => {
+      const body = loadFixture("chains-xplore.json");
+      vi.spyOn(globalThis, "fetch").mockResolvedValue(
+        new Response(JSON.stringify(body), {
+          status: 200,
+          headers: { "Content-Type": "application/json" },
+        }),
+      );
       const result = await client.callTool({
         name: "get_supported_chains",
         arguments: {},
       });
-      const chains = JSON.parse((result.content as Array<{ text: string }>)[0].text);
-      const ids = chains.map((c: { chainId: string }) => c.chainId);
-      expect(ids).toContain("1");
-      expect(ids).toContain("7565164");
+      const data = JSON.parse((result.content as Array<{ text: string }>)[0].text);
+      expect(data.chains).toBeDefined();
+      expect(data.chains.length).toBeGreaterThan(0);
+      const names = data.chains.map((c: { name: string }) => c.name);
+      expect(names).toContain("Ethereum");
+    });
+  });
+
+  describe("create_transaction", () => {
+    afterEach(() => {
+      vi.restoreAllMocks();
+    });
+
+    it("returns error when no routes found", async () => {
+      vi.spyOn(globalThis, "fetch").mockResolvedValue(
+        new Response(JSON.stringify({ routes: [] }), {
+          status: 200,
+          headers: { "Content-Type": "application/json" },
+        }),
+      );
+      const result = await client.callTool({
+        name: "create_transaction",
+        arguments: {
+          fromChain: "1",
+          toChain: "1",
+          fromToken: "0x0000000000000000000000000000000000000000",
+          toToken: "0x0000000000000000000000000000000000000001",
+          fromAmount: "1000000000000000000",
+          fromAddress: "0xd8dA6BF26964aF9D7eEd9e03E53415D37aA96045",
+          toAddress: "0xd8dA6BF26964aF9D7eEd9e03E53415D37aA96045",
+        },
+      });
+      expect(result.isError).toBe(true);
+      const data = JSON.parse((result.content as Array<{ text: string }>)[0].text);
+      expect(data.error).toContain("No routes found");
+    });
+
+    it("fetches routes and populates steps with tx data", async () => {
+      const routesResponse = {
+        routes: [{
+          id: "route-1",
+          fromChainId: "1",
+          toChainId: "42161",
+          steps: [{ id: "step-1", type: "swap", tool: "relay" }],
+        }],
+      };
+      const stepResponse = {
+        id: "step-1",
+        type: "swap",
+        tool: "relay",
+        transactionRequest: {
+          from: "0xd8dA6BF26964aF9D7eEd9e03E53415D37aA96045",
+          to: "0x1234",
+          data: "0xabcd",
+          value: "1000000000000000000",
+          chainId: "1",
+        },
+      };
+
+      let callCount = 0;
+      vi.spyOn(globalThis, "fetch").mockImplementation(async () => {
+        callCount++;
+        const body = callCount === 1 ? routesResponse : stepResponse;
+        return new Response(JSON.stringify(body), {
+          status: 200,
+          headers: { "Content-Type": "application/json" },
+        });
+      });
+
+      const result = await client.callTool({
+        name: "create_transaction",
+        arguments: {
+          fromChain: "1",
+          toChain: "42161",
+          fromToken: "0x0000000000000000000000000000000000000000",
+          toToken: "0xaf88d065e77c8cC2239327C5EDb3A432268e5831",
+          fromAmount: "1000000000000000000",
+          fromAddress: "0xd8dA6BF26964aF9D7eEd9e03E53415D37aA96045",
+          toAddress: "0xd8dA6BF26964aF9D7eEd9e03E53415D37aA96045",
+        },
+      });
+      expect(result.isError).toBeUndefined();
+      const data = JSON.parse((result.content as Array<{ text: string }>)[0].text);
+      expect(data.id).toBe("route-1");
+      expect(data.steps).toHaveLength(1);
+      expect(data.steps[0].transactionRequest).toBeDefined();
+      expect(data.steps[0].transactionRequest.data).toBe("0xabcd");
     });
   });
 });
