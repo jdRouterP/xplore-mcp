@@ -1,17 +1,17 @@
 {
   "$schema": "https://static.modelcontextprotocol.io/schemas/2025-12-11/server.schema.json",
-  "name": "io.github.debridge-finance/debridge-mcp",
-  "description": "deBridge MCP server",
+  "name": "io.github.router-protocol/xplore-mcp",
+  "description": "Router Protocol Xplore MCP server",
   "repository": {
-    "url": "https://github.com/debridge-finance/debridge-mcp",
+    "url": "https://github.com/router-protocol/xplore-mcp",
     "source": "github"
   },
-  "version": "0.1.3",
+  "version": "0.2.0",
   "packages": [
     {
       "registryType": "npm",
-      "identifier": "@debridge-finance/debridge-mcp",
-      "version": "0.1.3",
+      "identifier": "@router-protocol/xplore-mcp",
+      "version": "0.2.0",
       "transport": {
         "type": "stdio"
       }

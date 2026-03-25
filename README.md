@@ -1,21 +1,14 @@
-# deBridge MCP Server
+# Xplore MCP Server
 
-[![npm version](https://img.shields.io/npm/v/@debridge-finance/debridge-mcp?logo=npm&logoColor=white)](https://www.npmjs.com/package/@debridge-finance/debridge-mcp)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.9-blue?logo=typescript&logoColor=white)](https://www.typescriptlang.org/)
-[![MCP Registry](https://img.shields.io/badge/MCP-Registry-8A2BE2?logo=data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgdmlld0JveD0iMCAwIDI0IDI0IiBmaWxsPSJ3aGl0ZSI+PHBhdGggZD0iTTEyIDJMMiA3djEwbDEwIDUgMTAtNVY3TDEyIDJ6Ii8+PC9zdmc+)](https://registry.modelcontextprotocol.io/?q=io.github.debridge-finance%2Fdebridge-mcp)
 [![Node.js](https://img.shields.io/badge/Node.js-%3E%3D18-339933?logo=node.js&logoColor=white)](https://nodejs.org)
-[![GitHub Stars](https://img.shields.io/github/stars/debridge-finance/debridge-mcp?style=flat&logo=github)](https://github.com/debridge-finance/debridge-mcp)
-[![GitHub Issues](https://img.shields.io/github/issues/debridge-finance/debridge-mcp?logo=github)](https://github.com/debridge-finance/debridge-mcp/issues)
-[![GitHub Last Commit](https://img.shields.io/github/last-commit/debridge-finance/debridge-mcp?logo=github)](https://github.com/debridge-finance/debridge-mcp/commits/main)
 
-A Model Context Protocol (MCP) server for the [deBridge](https://debridge.com) protocol — enabling AI agents to find optimal cross-chain and same-chain swap routes, check fees and conditions, and initiate trades across major blockchain networks.
-
-https://github.com/user-attachments/assets/8ebe88ff-db3c-455e-9efb-50389e4bf5bd
+A Model Context Protocol (MCP) server for [Router Protocol](https://www.routerprotocol.com)'s Xplore API — enabling AI agents to find optimal cross-chain and same-chain swap routes, check fees and conditions, track transactions, and initiate trades across major blockchain networks.
 
 ## Transport Modes
 
-The deBridge MCP server supports two transport modes for local deployment:
+The Xplore MCP server supports two transport modes:
 
 - **stdio** (default) - Requires Node.js/npm. For local agent frameworks and CLI tools via standard input/output
 - **HTTP streaming** - Requires Docker OR Node.js/npm. For containerized deployments and web-based agents
@@ -27,7 +20,7 @@ The deBridge MCP server supports two transport modes for local deployment:
 Run directly without installation:
 
 ```bash
-npx -y @debridge-finance/debridge-mcp@latest
+npx -y @router-protocol/xplore-mcp@latest
 ```
 
 ### Installation from Source
@@ -35,8 +28,8 @@ npx -y @debridge-finance/debridge-mcp@latest
 Clone and build:
 
 ```bash
-git clone https://github.com/debridge-finance/debridge-mcp.git
-cd debridge-mcp
+git clone https://github.com/router-protocol/xplore-mcp.git
+cd xplore-mcp
 npm install
 npm run build
 ```
@@ -45,25 +38,25 @@ npm run build
 
 **stdio mode** (default):
 ```bash
-npx -y @debridge-finance/debridge-mcp@latest
+npx -y @router-protocol/xplore-mcp@latest
 # or from a cloned repo
 npm start
 ```
 
 **HTTP mode**:
 ```bash
-MCP_TRANSPORT=http npx -y @debridge-finance/debridge-mcp@latest
+MCP_TRANSPORT=http npx -y @router-protocol/xplore-mcp@latest
 # or from a cloned repo
 npm run start:http
 
 # Custom port
-MCP_TRANSPORT=http PORT=3001 npx -y @debridge-finance/debridge-mcp@latest
+MCP_TRANSPORT=http PORT=3001 npx -y @router-protocol/xplore-mcp@latest
 ```
 
 **Docker HTTP mode**:
 ```bash
-docker build -t debridge-mcp .
-docker run -p 3000:3000 debridge-mcp
+docker build -t xplore-mcp .
+docker run -p 3000:3000 xplore-mcp
 ```
 
 ### Configuration for Agent Frameworks
@@ -71,22 +64,21 @@ docker run -p 3000:3000 debridge-mcp
 **stdio configuration** (for local agents):
 
 ```json
-"debridge": {
+"xplore": {
   "type": "stdio",
   "command": "npx",
-  "args": ["-y", "@debridge-finance/debridge-mcp@latest"]
+  "args": ["-y", "@router-protocol/xplore-mcp@latest"]
 }
 ```
 
 **Streamable HTTP**:
 
 ```json
-"debridge": {
+"xplore": {
   "type": "streamable-http",
   "url": "http://localhost:3001/mcp"
 }
 ```
-
 
 <details>
 <summary>Claude Code (CLI & IDE plugins)</summary>
@@ -94,9 +86,9 @@ docker run -p 3000:3000 debridge-mcp
 Add the MCP server:
 
 ```bash
-claude mcp add debridge npx -- -y @debridge-finance/debridge-mcp@latest
+claude mcp add xplore npx -- -y @router-protocol/xplore-mcp@latest
 # OR
-claude mcp add debridge --transport http http://127.0.0.1:3000/mcp
+claude mcp add xplore --transport http http://127.0.0.1:3000/mcp
 ```
 
 Verify the connection:
@@ -110,65 +102,17 @@ claude mcp list
 <details>
 <summary>Cursor</summary>
 
-Use Cursor Deeplink: [![Install MCP Server](https://cursor.com/deeplink/mcp-install-dark.svg)](https://cursor.com/en-US/install-mcp?name=debridge&config=eyJjb21tYW5kIjoibnB4IC15IEBkZWJyaWRnZS1maW5hbmNlL2RlYnJpZGdlLW1jcEBsYXRlc3QifQ%3D%3D)
-
-OR install from [Cursor Directory](https://cursor.directory/mcp/debridge)
-
-OR add to `.cursor/mcp.json` in your project or `~/.cursor/mcp.json` globally:
+Add to `.cursor/mcp.json` in your project or `~/.cursor/mcp.json` globally:
 
 ```json
 {
   "mcpServers": {
-    "debridge": {
+    "xplore": {
       "command": "npx",
-      "args": ["-y", "@debridge-finance/debridge-mcp@latest"]
+      "args": ["-y", "@router-protocol/xplore-mcp@latest"]
     }
   }
 }
-```
-
-</details>
-
-
-<details>
-<summary>OpenClaw (via mcp-adapter plugin)</summary>
-
-Install the [mcp-adapter](https://github.com/androidStern-personal/openclaw-mcp-adapter) plugin:
-```bash
-openclaw plugins install mcp-adapter
-```
-
-Add to `~/.openclaw/openclaw.json`:
-```json
-{
-  "plugins": {
-    "entries": {
-      "mcp-adapter": {
-        "enabled": true,
-        "config": {
-          "servers": [
-            {
-              "name": "debridge",
-              "transport": "stdio",
-              "command": "npx",
-              "args": ["-y", "@debridge-finance/debridge-mcp@latest"]
-            }
-          ]
-        }
-      }
-    }
-  }
-}
-```
-
-Add `"mcp-adapter"` to your sandbox allowlist and restart:
-```bash
-openclaw gateway restart
-```
-
-Verify the connection:
-```bash
-openclaw plugins list
 ```
 
 </details>
@@ -181,21 +125,14 @@ Add to `.vscode/mcp.json` in your workspace:
 ```json
 {
   "mcpServers": {
-    "debridge": {
+    "xplore": {
       "type": "stdio",
       "command": "npx",
-      "args": ["-y", "@debridge-finance/debridge-mcp@latest"]
+      "args": ["-y", "@router-protocol/xplore-mcp@latest"]
     }
   }
 }
 ```
-
-</details>
-
-<details>
-<summary>Claude Web & Desktop Apps</summary>
-
-Not supported until [Streamable HTTP](https://github.com/debridge-finance/debridge-mcp/issues/1) is implemented.
 
 </details>
 
@@ -207,9 +144,9 @@ Add to `~/.codeium/windsurf/mcp_config.json`:
 ```json
 {
   "mcpServers": {
-    "debridge": {
+    "xplore": {
       "command": "npx",
-      "args": ["-y", "@debridge-finance/debridge-mcp@latest"]
+      "args": ["-y", "@router-protocol/xplore-mcp@latest"]
     }
   }
 }
@@ -225,9 +162,9 @@ Open Cline settings in VS Code, go to MCP Servers, click "Edit MCP Settings" and
 ```json
 {
   "mcpServers": {
-    "debridge": {
+    "xplore": {
       "command": "npx",
-      "args": ["-y", "@debridge-finance/debridge-mcp@latest"]
+      "args": ["-y", "@router-protocol/xplore-mcp@latest"]
     }
   }
 }
@@ -244,9 +181,9 @@ Add to `~/.continue/config.json`:
 {
   "mcpServers": [
     {
-      "name": "debridge",
+      "name": "xplore",
       "command": "npx",
-      "args": ["-y", "@debridge-finance/debridge-mcp@latest"]
+      "args": ["-y", "@router-protocol/xplore-mcp@latest"]
     }
   ]
 }
@@ -262,29 +199,11 @@ Add to your Zed settings (`~/.config/zed/settings.json`):
 ```json
 {
   "context_servers": {
-    "debridge": {
+    "xplore": {
       "command": {
         "path": "npx",
-        "args": ["-y", "@debridge-finance/debridge-mcp@latest"]
+        "args": ["-y", "@router-protocol/xplore-mcp@latest"]
       }
-    }
-  }
-}
-```
-
-</details>
-
-<details>
-<summary>OpenClaw</summary>
-
-Add to your OpenClaw config (`~/.openclaw/mcp.json`):
-
-```json
-{
-  "mcpServers": {
-    "debridge": {
-      "command": "npx",
-      "args": ["-y", "@debridge-finance/debridge-mcp@latest"]
     }
   }
 }
@@ -307,4 +226,4 @@ npm test
 
 ## License
 
-[MIT](LICENSE), Copyright 2026 deBridge
+[MIT](LICENSE), Copyright 2026 Router Protocol

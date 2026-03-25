@@ -8,7 +8,7 @@ import { registerSearchTokens } from "./tools/search-tokens.js";
 import { registerGetSupportedChains } from "./tools/get-supported-chains.js";
 import { registerGetQuote } from "./tools/get-quote.js";
 import { registerCreateTransaction } from "./tools/create-transaction.js";
-import { registerGetTradeDappUrl } from "./tools/get-trade-dapp-url.js";
+import { registerGetDappUrl } from "./tools/get-trade-dapp-url.js";
 import { registerCheckTransactionStatus } from "./tools/check-transaction-status.js";
 import { registerGetTools } from "./tools/get-tools.js";
 import { registerGetConnections } from "./tools/get-connections.js";
@@ -42,7 +42,7 @@ export function createServer(tokenDb: TokenDb) {
   registerGetSupportedChains(server);
   registerGetQuote(server);
   registerCreateTransaction(server);
-  registerGetTradeDappUrl(server);
+  registerGetDappUrl(server);
   registerCheckTransactionStatus(server);
   registerGetTools(server);
   registerGetConnections(server);

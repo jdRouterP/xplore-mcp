@@ -131,7 +131,7 @@ describe("HTTP Streamable Transport", () => {
       expect(toolNames).toContain("get_supported_chains");
       expect(toolNames).toContain("get_quote");
       expect(toolNames).toContain("create_transaction");
-      expect(toolNames).toContain("get_trade_dapp_url");
+      expect(toolNames).toContain("get_dapp_url");
     });
 
     it("should include tool descriptions", async () => {

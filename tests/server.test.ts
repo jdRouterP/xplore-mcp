@@ -60,7 +60,7 @@ describe("xplore-mcp server", () => {
   it("lists tools", async () => {
     const result = await client.listTools();
     const names = result.tools.map((t) => t.name).sort();
-    expect(names).toEqual(["check_transaction_status", "create_transaction", "get_connections", "get_instructions", "get_quote", "get_supported_chains", "get_tools", "get_trade_dapp_url", "search_tokens"]);
+    expect(names).toEqual(["check_transaction_status", "create_transaction", "get_connections", "get_dapp_url", "get_instructions", "get_quote", "get_supported_chains", "get_tools", "search_tokens"]);
   });
 
   it("returns instructions from get_instructions tool", async () => {

@@ -1,27 +1,27 @@
 import { z } from "zod";
 import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 
-const DEBRIDGE_APP_BASE = "https://app.debridge.com/";
+const ROUTER_APP_BASE = "https://app.routerprotocol.com/swap";
 
-export function registerGetTradeDappUrl(server: McpServer) {
+export function registerGetDappUrl(server: McpServer) {
   server.registerTool(
-    "get_trade_dapp_url",
+    "get_dapp_url",
     {
       description:
-        "Generate a deBridge app URL that redirects the user to continue a cross-chain swap in the browser. Use search_tokens to resolve token names to addresses and get_supported_chains for chain IDs before calling this tool.",
+        "Generate a Router Protocol app URL that redirects the user to complete a swap in the browser. Use search_tokens to resolve token names to addresses and get_supported_chains for chain IDs before calling this tool.",
       inputSchema: {
-        inputChain: z
+        fromChain: z
           .string()
           .describe("Source chain ID. Examples: '1' (Ethereum), '56' (BNB Chain), '137' (Polygon), '7565164' (Solana)"),
-        outputChain: z
+        toChain: z
           .string()
           .describe("Destination chain ID. Examples: '1' (Ethereum), '56' (BNB Chain), '42161' (Arbitrum)"),
-        inputCurrency: z
+        fromToken: z
           .string()
           .optional()
           .default("")
           .describe("Token address on the source chain. Leave empty for the chain's native token (ETH, BNB, etc.)"),
-        outputCurrency: z
+        toToken: z
           .string()
           .optional()
           .default("")
@@ -29,11 +29,6 @@ export function registerGetTradeDappUrl(server: McpServer) {
         amount: z
           .string()
           .describe("Human-readable amount to swap (e.g. '1.5', '100'). NOT in smallest units — use decimal notation"),
-        dlnMode: z
-          .string()
-          .optional()
-          .default("simple")
-          .describe("DLN mode: 'simple' (default) or 'advanced'"),
         address: z
           .string()
           .optional()
@@ -41,14 +36,13 @@ export function registerGetTradeDappUrl(server: McpServer) {
       },
     },
     async (params) => {
-      const url = new URL(DEBRIDGE_APP_BASE);
+      const url = new URL(ROUTER_APP_BASE);
 
-      url.searchParams.set("inputChain", params.inputChain);
-      url.searchParams.set("outputChain", params.outputChain);
-      url.searchParams.set("inputCurrency", params.inputCurrency);
-      url.searchParams.set("outputCurrency", params.outputCurrency);
+      url.searchParams.set("fromChain", params.fromChain);
+      url.searchParams.set("toChain", params.toChain);
+      if (params.fromToken) url.searchParams.set("fromToken", params.fromToken);
+      if (params.toToken) url.searchParams.set("toToken", params.toToken);
       url.searchParams.set("amount", params.amount);
-      url.searchParams.set("dlnMode", params.dlnMode);
       if (params.address) {
         url.searchParams.set("address", params.address);
       }

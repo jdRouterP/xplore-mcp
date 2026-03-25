@@ -7,7 +7,7 @@ export function registerSearchTokens(server: McpServer, tokenDb: TokenDb) {
     "search_tokens",
     {
       description:
-        "Search for tokens by name, symbol, or contract address in the deBridge token database. Returns matching tokens with address, symbol, name, decimals, and chain info. Use this to resolve human-readable token names to contract addresses before creating swap orders.",
+        "Search for tokens by name, symbol, or contract address. Returns matching tokens with address, symbol, name, decimals, and chain info. Use this to resolve human-readable token names to contract addresses before creating swap orders.",
       inputSchema: {
         query: z.string().describe(
           "Token name, symbol, or contract address. Examples: 'USDC', 'ethereum', '0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48'",

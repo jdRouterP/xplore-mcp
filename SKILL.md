@@ -26,7 +26,7 @@ Follow these steps to fulfill a user's swap or transfer request:
    parameters. This returns full route details with populated transaction data ready for
    signing and submission.
 
-5. **Generate an app link**: Call `get_trade_dapp_url` with the chain IDs, token addresses,
+5. **Generate an app link**: Call `get_dapp_url` with the chain IDs, token addresses,
    the human-readable amount (NOT in smallest units), and the recipient `address` (if known)
    to produce a URL. Share this URL with the user so they can review and execute the swap
    in the Router Protocol App.
@@ -51,7 +51,7 @@ Before quoting, you can optionally explore available routes:
   output, fees, route details, and transaction data for simple routes.
 - `create_transaction` — Build a swap transaction with full route and step details.
   Returns populated transaction data ready for signing.
-- `get_trade_dapp_url` — Generate a pre-filled Router Protocol App URL for the user to
+- `get_dapp_url` — Generate a pre-filled Router Protocol App URL for the user to
   execute the swap. Accepts an optional `address` parameter to pre-fill the recipient wallet.
 - `check_transaction_status` — Check the status of a transaction by its hash.
   Returns status (PENDING/DONE/FAILED), sending/receiving details, and the bridge used.
@@ -62,7 +62,7 @@ Before quoting, you can optionally explore available routes:
 
 - Always resolve token addresses via `search_tokens` rather than guessing addresses.
 - Convert amounts to smallest units (wei, lamports) for `get_quote` and `create_transaction`,
-  but use human-readable decimals for `get_trade_dapp_url`.
+  but use human-readable decimals for `get_dapp_url`.
 - Use `0x0000000000000000000000000000000000000000` as the token address for native
   tokens (ETH, BNB, MATIC, etc.) on EVM chains.
 - Present the estimated output and fees from `get_quote` to the user before proceeding.

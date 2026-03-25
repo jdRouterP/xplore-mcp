@@ -48,7 +48,7 @@ if (process.env.MCP_TRANSPORT === "http") {
       console.error(`Failed to start server: ${err.message}`);
       process.exit(1);
     }
-    console.error(`deBridge MCP server running on http://${host}:${port}/mcp`);
+    console.error(`Xplore MCP server running on http://${host}:${port}/mcp`);
   });
 } else {
   // Stdio mode (default)
