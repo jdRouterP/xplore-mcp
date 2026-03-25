@@ -60,7 +60,7 @@ describe("xplore-mcp server", () => {
   it("lists tools", async () => {
     const result = await client.listTools();
     const names = result.tools.map((t) => t.name).sort();
-    expect(names).toEqual(["create_transaction", "get_instructions", "get_quote", "get_supported_chains", "get_trade_dapp_url", "search_tokens"]);
+    expect(names).toEqual(["check_transaction_status", "create_transaction", "get_connections", "get_instructions", "get_quote", "get_supported_chains", "get_tools", "get_trade_dapp_url", "search_tokens"]);
   });
 
   it("returns instructions from get_instructions tool", async () => {
@@ -328,6 +328,143 @@ describe("xplore-mcp server", () => {
       expect(data.steps).toHaveLength(1);
       expect(data.steps[0].transactionRequest).toBeDefined();
       expect(data.steps[0].transactionRequest.data).toBe("0xabcd");
+    });
+  });
+
+  describe("check_transaction_status", () => {
+    afterEach(() => {
+      vi.restoreAllMocks();
+    });
+
+    function mockFetch(fixture: string, status = 200) {
+      const body = loadFixture(fixture);
+      vi.spyOn(globalThis, "fetch").mockResolvedValue(
+        new Response(JSON.stringify(body), {
+          status,
+          headers: { "Content-Type": "application/json" },
+        }),
+      );
+    }
+
+    it("returns status for a completed transaction", async () => {
+      mockFetch("status-sample.json");
+      const result = await client.callTool({
+        name: "check_transaction_status",
+        arguments: {
+          txHash: "0x51cc1597a6b37e90e164901af43bb2ec5f689e79d2bf15b584a460dc78d0b94f",
+        },
+      });
+      expect(result.isError).toBeUndefined();
+      const data = JSON.parse((result.content as Array<{ text: string }>)[0].text);
+      expect(data.status).toBe("DONE");
+      expect(data.sending).toBeDefined();
+      expect(data.sending.txHash).toBeDefined();
+    });
+
+    it("returns error for not found transaction", async () => {
+      vi.spyOn(globalThis, "fetch").mockResolvedValue(
+        new Response(JSON.stringify({ status: 404, code: "NOT_FOUND", message: "Transaction not found" }), {
+          status: 404,
+          headers: { "Content-Type": "application/json" },
+        }),
+      );
+      const result = await client.callTool({
+        name: "check_transaction_status",
+        arguments: {
+          txHash: "0x0000000000000000000000000000000000000000000000000000000000000000",
+        },
+      });
+      expect(result.isError).toBe(true);
+      const data = JSON.parse((result.content as Array<{ text: string }>)[0].text);
+      expect(data.statusCode).toBe(404);
+    });
+  });
+
+  describe("get_tools", () => {
+    afterEach(() => {
+      vi.restoreAllMocks();
+    });
+
+    it("returns bridges and exchanges", async () => {
+      const body = loadFixture("tools-all.json");
+      vi.spyOn(globalThis, "fetch").mockResolvedValue(
+        new Response(JSON.stringify(body), {
+          status: 200,
+          headers: { "Content-Type": "application/json" },
+        }),
+      );
+      const result = await client.callTool({
+        name: "get_tools",
+        arguments: {},
+      });
+      expect(result.isError).toBeUndefined();
+      const data = JSON.parse((result.content as Array<{ text: string }>)[0].text);
+      expect(data.bridges).toBeDefined();
+      expect(Array.isArray(data.bridges)).toBe(true);
+      expect(data.bridges.length).toBeGreaterThan(0);
+      expect(data.bridges[0]).toHaveProperty("key");
+      expect(data.bridges[0]).toHaveProperty("name");
+      expect(data.bridges[0]).toHaveProperty("supportedChains");
+    });
+
+    it("passes chains filter to API", async () => {
+      const fetchSpy = vi.spyOn(globalThis, "fetch").mockResolvedValue(
+        new Response(JSON.stringify({ bridges: [], exchanges: [] }), {
+          status: 200,
+          headers: { "Content-Type": "application/json" },
+        }),
+      );
+      await client.callTool({
+        name: "get_tools",
+        arguments: { chains: "1,42161" },
+      });
+      expect(fetchSpy).toHaveBeenCalledTimes(1);
+      const url = fetchSpy.mock.calls[0][0] as string;
+      expect(url).toContain("chains=1%2C42161");
+    });
+  });
+
+  describe("get_connections", () => {
+    afterEach(() => {
+      vi.restoreAllMocks();
+    });
+
+    it("returns connections between chains", async () => {
+      const body = loadFixture("connections-eth-arb.json");
+      vi.spyOn(globalThis, "fetch").mockResolvedValue(
+        new Response(JSON.stringify(body), {
+          status: 200,
+          headers: { "Content-Type": "application/json" },
+        }),
+      );
+      const result = await client.callTool({
+        name: "get_connections",
+        arguments: { fromChain: "1", toChain: "42161" },
+      });
+      expect(result.isError).toBeUndefined();
+      const data = JSON.parse((result.content as Array<{ text: string }>)[0].text);
+      expect(data.connections).toBeDefined();
+      expect(Array.isArray(data.connections)).toBe(true);
+      expect(data.connections.length).toBeGreaterThan(0);
+      expect(data.connections[0]).toHaveProperty("fromChainId");
+      expect(data.connections[0]).toHaveProperty("toChainId");
+      expect(data.connections[0]).toHaveProperty("tools");
+    });
+
+    it("works without filters", async () => {
+      vi.spyOn(globalThis, "fetch").mockResolvedValue(
+        new Response(JSON.stringify({ connections: [] }), {
+          status: 200,
+          headers: { "Content-Type": "application/json" },
+        }),
+      );
+      const result = await client.callTool({
+        name: "get_connections",
+        arguments: {},
+      });
+      expect(result.isError).toBeUndefined();
+      const data = JSON.parse((result.content as Array<{ text: string }>)[0].text);
+      expect(data.connections).toBeDefined();
     });
   });
 });

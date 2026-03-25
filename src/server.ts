@@ -9,6 +9,9 @@ import { registerGetSupportedChains } from "./tools/get-supported-chains.js";
 import { registerGetQuote } from "./tools/get-quote.js";
 import { registerCreateTransaction } from "./tools/create-transaction.js";
 import { registerGetTradeDappUrl } from "./tools/get-trade-dapp-url.js";
+import { registerCheckTransactionStatus } from "./tools/check-transaction-status.js";
+import { registerGetTools } from "./tools/get-tools.js";
+import { registerGetConnections } from "./tools/get-connections.js";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const skillMd = readFileSync(resolve(__dirname, "../SKILL.md"), "utf-8");
@@ -40,6 +43,9 @@ export function createServer(tokenDb: TokenDb) {
   registerGetQuote(server);
   registerCreateTransaction(server);
   registerGetTradeDappUrl(server);
+  registerCheckTransactionStatus(server);
+  registerGetTools(server);
+  registerGetConnections(server);
 
   return server;
 }

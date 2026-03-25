@@ -31,6 +31,17 @@ Follow these steps to fulfill a user's swap or transfer request:
    to produce a URL. Share this URL with the user so they can review and execute the swap
    in the Router Protocol App.
 
+6. **Track transaction**: After the user submits a transaction, call `check_transaction_status`
+   with the transaction hash to monitor progress. The status will be PENDING, DONE, or FAILED.
+
+### Discovery (optional)
+
+Before quoting, you can optionally explore available routes:
+
+- Call `get_connections` to check what token pairs and routing tools are available between
+  two chains.
+- Call `get_tools` to see which bridges and DEX exchanges are available for routing.
+
 ## Tools
 
 - `get_instructions` — Show this guide.
@@ -42,6 +53,10 @@ Follow these steps to fulfill a user's swap or transfer request:
   Returns populated transaction data ready for signing.
 - `get_trade_dapp_url` — Generate a pre-filled Router Protocol App URL for the user to
   execute the swap. Accepts an optional `address` parameter to pre-fill the recipient wallet.
+- `check_transaction_status` — Check the status of a transaction by its hash.
+  Returns status (PENDING/DONE/FAILED), sending/receiving details, and the bridge used.
+- `get_tools` — List available bridges and DEX exchanges for routing. Optionally filter by chain.
+- `get_connections` — List available connections between two chains with supported tokens and tools.
 
 ## Tips
 

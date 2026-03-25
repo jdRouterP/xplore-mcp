@@ -1,0 +1,52 @@
+{
+    "status": "DONE",
+    "sending": {
+        "txHash": "0x51cc1597a6b37e90e164901af43bb2ec5f689e79d2bf15b584a460dc78d0b94f",
+        "txLink": "https://arbiscan.io/tx/0x51cc1597a6b37e90e164901af43bb2ec5f689e79d2bf15b584a460dc78d0b94f",
+        "amount": "5987406",
+        "token": {
+            "address": "0xaf88d065e77c8cc2239327c5edb3a432268e5831",
+            "chainId": "42161",
+            "symbol": "USDC",
+            "decimals": 6,
+            "name": "USD Coin",
+            "logoUri": "https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/assets/0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48/logo.png"
+        },
+        "chainId": "42161",
+        "timestamp": 1760429745
+    },
+    "receiving": {
+        "txHash": "0x584efc814f939da5dc931e300d5670be3c97e1ffa48ec9e420da9a4f27a4eada",
+        "txLink": "https://etherscan.io/tx/0x584efc814f939da5dc931e300d5670be3c97e1ffa48ec9e420da9a4f27a4eada",
+        "amount": "5945684",
+        "token": {
+            "address": "0x176211869ca2b568f2a7d4ee941e073a821ee1ff",
+            "chainId": "59144",
+            "symbol": "USDC",
+            "decimals": 6,
+            "name": "USDC",
+            "logoUri": "https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/assets/0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48/logo.png"
+        },
+        "chainId": "59144",
+        "timestamp": 1760429747
+    },
+    "tool": "across",
+    "fromChainId": "42161",
+    "toChainId": "59144",
+    "fromToken": {
+        "address": "0xaf88d065e77c8cc2239327c5edb3a432268e5831",
+        "chainId": "42161",
+        "symbol": "USDC",
+        "decimals": 6,
+        "name": "USD Coin",
+        "logoUri": "https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/assets/0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48/logo.png"
+    },
+    "toToken": {
+        "address": "0x176211869ca2b568f2a7d4ee941e073a821ee1ff",
+        "chainId": "59144",
+        "symbol": "USDC",
+        "decimals": 6,
+        "name": "USDC",
+        "logoUri": "https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/assets/0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48/logo.png"
+    }
+}
